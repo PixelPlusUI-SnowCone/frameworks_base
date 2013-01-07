@@ -304,5 +304,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.QS_FOOTER_TEXT_STRING, ANY_STRING_VALIDATOR);
         VALIDATORS.put(System.QS_SHOW_BATTERY_ESTIMATE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.FLASHLIGHT_ON_CALL, new InclusiveIntegerRangeValidator(0, 4));
+        VALIDATORS.put(System.HEADSET_CONNECT_PLAYER, BOOLEAN_VALIDATOR);
     }
 }

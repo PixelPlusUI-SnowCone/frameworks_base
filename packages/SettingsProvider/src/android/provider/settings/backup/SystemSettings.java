@@ -96,5 +96,6 @@ public class SystemSettings {
         Settings.System.QS_FOOTER_TEXT_STRING,
         Settings.System.QS_SHOW_BATTERY_ESTIMATE,
         Settings.System.FLASHLIGHT_ON_CALL,
+        Settings.System.HEADSET_CONNECT_PLAYER,
     };
 }
