@@ -103,5 +103,6 @@ public class SystemSettings {
         Settings.System.FLASHLIGHT_ON_CALL_IGNORE_DND,
         Settings.System.FLASHLIGHT_ON_CALL_RATE,
         Settings.System.USE_OLD_MOBILETYPE,
+        Settings.System.SHOW_FOURG_ICON,
     };
 }
