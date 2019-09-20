@@ -97,5 +97,6 @@ public class SystemSettings {
         Settings.System.QS_SHOW_BATTERY_ESTIMATE,
         Settings.System.FLASHLIGHT_ON_CALL,
         Settings.System.HEADSET_CONNECT_PLAYER,
+        Settings.System.NAVIGATION_BAR_INVERSE,
     };
 }

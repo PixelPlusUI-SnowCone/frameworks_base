@@ -122,6 +122,7 @@ public class NavigationBarInflaterView extends FrameLayout
 
     private static AtomicReference<Boolean> mIsHintEnabledRef;
     private int mHomeHandleWidthMode = 0;
+    private boolean mNavBarLayoutInverse = false;
 
     public NavigationBarInflaterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -133,6 +134,8 @@ public class NavigationBarInflaterView extends FrameLayout
         mCompactLayout = Settings.System.getInt(context.getContentResolver(),
                                 Settings.System.NAV_BAR_COMPACT_LAYOUT, 0) != 0;
         mIsHintEnabledRef = new AtomicReference<>(true);
+        mNavBarLayoutInverse = controller.shouldInvertNavBarLayout();
+        updateLayoutInversion();
     }
 
     @VisibleForTesting
@@ -202,6 +205,26 @@ public class NavigationBarInflaterView extends FrameLayout
                 clearViews();
                 inflateLayout(getDefaultLayout());
             }
+        }
+    }
+
+    @Override
+    public void onNavBarLayoutInverseChanged(boolean inverse) {
+        if (mNavBarLayoutInverse == inverse) return;
+        mNavBarLayoutInverse = inverse;
+        if (mNavBarMode != NAV_BAR_MODE_3BUTTON) return;
+        updateLayoutInversion();
+    }
+
+    private void updateLayoutInversion() {
+        if (mNavBarLayoutInverse) {
+            final int layoutDirection = mContext.getResources()
+                .getConfiguration().getLayoutDirection();
+            setLayoutDirection(layoutDirection == LAYOUT_DIRECTION_RTL
+                ? LAYOUT_DIRECTION_LTR
+                : LAYOUT_DIRECTION_RTL);
+        } else {
+            setLayoutDirection(LAYOUT_DIRECTION_INHERIT);
         }
     }
 
@@ -377,19 +400,6 @@ public class NavigationBarInflaterView extends FrameLayout
         inflateCursorButtons(mVertical.findViewById(R.id.dpad_group), true /* landscape */);
 
         updateButtonDispatchersCurrentView();
-    }
-
-    private void updateLayoutInversion() {
-        if (mInverseLayout) {
-            Configuration config = mContext.getResources().getConfiguration();
-            if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-                setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-            } else {
-                setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            }
-        } else {
-            setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
-        }
     }
 
     private void addGravitySpacer(LinearLayout layout) {
