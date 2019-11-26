@@ -7443,5 +7443,8 @@ message MetricsEvent {
     // CustomSettings constant
     CUSTOM_SETTINGS = 1999;
 
+    // PixelPlusUI QS Tiles constant
+    PPUI_QS_TILES = 2022;
+
   }
 }
