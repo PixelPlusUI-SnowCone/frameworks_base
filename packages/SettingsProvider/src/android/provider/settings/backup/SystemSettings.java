@@ -93,5 +93,6 @@ public class SystemSettings {
         Settings.System.NETWORK_TRAFFIC_VIEW_LOCATION,
         Settings.System.LOCKSCREEN_SMALL_CLOCK,
         Settings.System.QS_FOOTER_TEXT_SHOW,
+        Settings.System.QS_FOOTER_TEXT_STRING,
     };
 }
