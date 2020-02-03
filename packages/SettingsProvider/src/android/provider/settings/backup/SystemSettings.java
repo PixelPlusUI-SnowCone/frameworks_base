@@ -98,5 +98,6 @@ public class SystemSettings {
         Settings.System.FLASHLIGHT_ON_CALL,
         Settings.System.HEADSET_CONNECT_PLAYER,
         Settings.System.NAVIGATION_BAR_INVERSE,
+        Settings.System.RINGTONE_VIBRATION_PATTERN,
     };
 }
