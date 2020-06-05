@@ -99,5 +99,6 @@ public class SystemSettings {
         Settings.System.HEADSET_CONNECT_PLAYER,
         Settings.System.NAVIGATION_BAR_INVERSE,
         Settings.System.RINGTONE_VIBRATION_PATTERN,
+        Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
     };
 }
