@@ -52,4 +52,10 @@
     <string name="dlg_ok" translatable="false">@android:string/ok</string>
     <string name="dlg_cancel" translatable="false">@android:string/cancel</string>
     <string name="guts_force_close_app">Close App</string>
+
+    <!-- Screenshot delete action -->
+    <!-- Label for UI element which allows deleting the screenshot [CHAR LIMIT=30] -->
+    <string name="screenshot_delete_label">Delete</string>
+    <!-- Content description indicating that tapping the element will allow deleting the screenshot [CHAR LIMIT=NONE] -->
+    <string name="screenshot_delete_description">Delete screenshot</string>
 </resources>
