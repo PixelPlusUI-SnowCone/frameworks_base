@@ -1197,6 +1197,11 @@ public class Typeface {
         return tf == null ? getSystemDefaultTypeface(familyName) : tf;
     }
 
+    private static Typeface getSystemOverrideTypeface(@NonNull String familyName) {
+        Typeface tf = sSystemFontOverrides.get(familyName);
+        return tf == null ? getSystemDefaultTypeface(familyName) : tf;
+    }
+
     private static Typeface getSystemDefaultTypeface(@NonNull String familyName) {
         Typeface tf = sSystemFontMap.get(familyName);
         return tf == null ? Typeface.DEFAULT : tf;
