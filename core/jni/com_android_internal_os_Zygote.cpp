@@ -125,6 +125,7 @@ static jmethodID gCallPostForkChildHooks;
 static constexpr const char* kZygoteInitClassName = "com/android/internal/os/ZygoteInit";
 static jclass gZygoteInitClass;
 static jmethodID gGetOrCreateSystemServerClassLoader;
+static jmethodID gPrefetchStandaloneSystemServerJars;
 
 static bool gIsSecurityEnforced = true;
 
@@ -1644,6 +1645,12 @@ static void SpecializeCommon(JNIEnv* env, uid_t uid, gid_t gid, jintArray gids, 
             // at a later point (but may not have rights to use AoT artifacts).
             env->ExceptionClear();
         }
+        // Also prefetch standalone system server jars. The reason for doing this here is the same
+        // as above.
+        env->CallStaticObjectMethod(gZygoteInitClass, gPrefetchStandaloneSystemServerJars);
+        if (env->ExceptionCheck()) {
+            env->ExceptionClear();
+        }
     }
 
     if (setresgid(gid, gid, gid) == -1) {
@@ -2714,6 +2721,9 @@ int register_com_android_internal_os_Zygote(JNIEnv* env) {
   gGetOrCreateSystemServerClassLoader =
           GetStaticMethodIDOrDie(env, gZygoteInitClass, "getOrCreateSystemServerClassLoader",
                                  "()Ljava/lang/ClassLoader;");
+  gPrefetchStandaloneSystemServerJars =
+          GetStaticMethodIDOrDie(env, gZygoteInitClass, "prefetchStandaloneSystemServerJars",
+                                 "()V");
 
   RegisterMethodsOrDie(env, "com/android/internal/os/Zygote", gMethods, NELEM(gMethods));
 
