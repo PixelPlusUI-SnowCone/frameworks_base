@@ -5741,6 +5741,13 @@ public final class Settings {
         public static final String DISPLAY_CUTOUT_HIDDEN = "display_cutout_hidden";
 
         /**
+         * Whether to force small clock on keyguard
+         * @hide
+         */
+        @Readable
+        public static final String LOCKSCREEN_SMALL_CLOCK = "lockscreen_small_clock";
+
+        /**
          * Whether to enable taskbar.
          * @hide
          */
