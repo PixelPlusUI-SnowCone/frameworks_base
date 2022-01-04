@@ -1874,13 +1874,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         initSingleKeyGestureRules();
         mSideFpsEventHandler = new SideFpsEventHandler(mContext, mHandler, mPowerManager);
 
-        final String[] deviceKeyHandlerLibs = res.getStringArray(
-                com.android.internal.R.array.config_deviceKeyHandlerLibs);
-        final String[] deviceKeyHandlerClasses = res.getStringArray(
-                com.android.internal.R.array.config_deviceKeyHandlerClasses);
+        final String[] deviceKeyHandlerLibs = res.getStringArray(R.array.config_deviceKeyHandlerLibs);
+        final String[] deviceKeyHandlerClasses = res.getStringArray(R.array.config_deviceKeyHandlerClasses);
+        final int maxHandlers = Math.min(deviceKeyHandlerLibs.length, deviceKeyHandlerClasses.length);
 
-        for (int i = 0;
-                i < deviceKeyHandlerLibs.length && i < deviceKeyHandlerClasses.length; i++) {
+        for (int i = 0; i < maxHandlers; i++) {
             try {
                 PathClassLoader loader = new PathClassLoader(
                         deviceKeyHandlerLibs[i], getClass().getClassLoader());
@@ -2922,7 +2920,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         // Specific device key handling
-        if (dispatchKeyToKeyHandlers(event)) {
+        if (dispatchEventToKeyHandlers(event)) {
             return key_consumed;
         }
 
@@ -2978,8 +2976,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private boolean dispatchKeyToKeyHandlers(KeyEvent event) {
-        for (DeviceKeyHandler handler : mDeviceKeyHandlers) {
+    private boolean dispatchEventToKeyHandlers(KeyEvent event) {
+        for (DeviceKeyHandler handler: mDeviceKeyHandlers) {
             try {
                 if (DEBUG_INPUT) {
                     Log.d(TAG, "Dispatching key event " + event + " to handler " + handler);
@@ -3619,7 +3617,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 && event.getRepeatCount() == 0;
 
         // Specific device key handling
-        if (dispatchKeyToKeyHandlers(event)) {
+        if (dispatchEventToKeyHandlers(event)) {
             return 0;
         }
 
