@@ -46,6 +46,10 @@
     <!-- Allow devices override audio panel location to the left side -->
     <bool name="config_audioPanelOnLeftSide">false</bool>
 
+    <!-- tiles that should NEVER end up in qs -->
+    <string name="quick_settings_tiles_blacklist" translatable="false">
+    </string>
+
     <!-- The CPU temperature sensor path, defaults to empty -->
     <string name="config_cpuTempSensor" translatable="false">/sys/class/thermal/thermal_zone0/temp</string>
 
