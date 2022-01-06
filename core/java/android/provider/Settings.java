@@ -5840,6 +5840,13 @@ public final class Settings {
         public static final String QS_FOOTER_TEXT_STRING = "qs_footer_text_string";
 
         /**
+         * Whether to show battery estimates in QS
+         * @hide
+         */
+        @Readable
+        public static final String QS_SHOW_BATTERY_ESTIMATE = "qs_show_battery_estimate";
+
+        /**
          * These are all public system settings
          *
          * @hide
