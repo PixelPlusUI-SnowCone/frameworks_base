@@ -457,6 +457,9 @@ public class StatusBarNotificationPresenter implements NotificationPresenter,
         @Override
         public boolean suppressAwakeHeadsUp(NotificationEntry entry) {
             final StatusBarNotification sbn = entry.getSbn();
+            if (sbn.getIsContentSecure()) {
+                return true;
+            }
             if (mStatusBar.isOccluded()) {
                 boolean devicePublic = mLockscreenUserManager
                         .isLockscreenPublicMode(mLockscreenUserManager.getCurrentUserId());
