@@ -6784,6 +6784,9 @@ public class ActivityManagerService extends IActivityManager.Stub
         }
 
         synchronized (mProcLock) {
+            if (mPendingStartActivityUids.isPendingTopUid(uid)) {
+                return PROCESS_STATE_TOP;
+            }
             return mProcessList.getUidProcStateLOSP(uid);
         }
     }
