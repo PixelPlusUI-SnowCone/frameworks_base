@@ -16,8 +16,12 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.view.View;
 
 import com.android.internal.annotations.VisibleForTesting;
@@ -60,7 +64,7 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
     private final HeadsUpManagerPhone mHeadsUpManager;
     private final NotificationStackScrollLayoutController mStackScrollerController;
     private final View mCenteredIconView;
-    private final ClockController mClockController;
+    private final View mClockView;
     private final View mOperatorNameView;
     private final DarkIconDispatcher mDarkIconDispatcher;
     private final NotificationPanelViewController mNotificationPanelViewController;
@@ -108,7 +112,6 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
                 //  (which also removes the undesirable @VisibleForTesting).
                 statusBarView.findViewById(R.id.heads_up_status_bar_view),
                 statusBarView.findViewById(R.id.clock),
-                new ClockController(statusBarView.getContext(), statusBarView),
                 statusBarView.findViewById(R.id.operator_name_frame),
                 statusBarView.findViewById(R.id.centered_icon_area));
     }
@@ -126,7 +129,6 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
             NotificationPanelViewController notificationPanelViewController,
             HeadsUpStatusBarView headsUpStatusBarView,
             View clockView,
-            ClockController clockController,
             View operatorNameView,
             View centeredIconView) {
         super(headsUpStatusBarView);
@@ -145,7 +147,7 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
         mStackScrollerController = stackScrollerController;
         mNotificationPanelViewController = notificationPanelViewController;
         mStackScrollerController.setHeadsUpAppearanceController(this);
-        mClockController = clockController;
+        mClockView = clockView;
         mOperatorNameView = operatorNameView;
         mDarkIconDispatcher = Dependency.get(DarkIconDispatcher.class);
 
@@ -230,17 +232,18 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
     }
 
     private void setShown(boolean isShown) {
+        final int clockStyle = Settings.System.getIntForUser(mClockView.getContext().getContentResolver(),
+                Settings.System.STATUSBAR_CLOCK_STYLE, 0, UserHandle.USER_CURRENT);
+        final boolean isClockVisible = Settings.System.getIntForUser(mClockView.getContext().getContentResolver(),
+                Settings.System.STATUSBAR_CLOCK, 1,
+                UserHandle.USER_CURRENT) == 1;
         if (mShown != isShown) {
-            View clockView = mClockController.getClock();
-            boolean isRightClock = clockView.getId() == R.id.clock_right;
             mShown = isShown;
             if (isShown) {
                 updateParentClipping(false /* shouldClip */);
                 mView.setVisibility(View.VISIBLE);
                 show(mView);
-                if (!isRightClock) {
-                    hide(clockView, View.INVISIBLE);
-                }
+                hide(mClockView, View.INVISIBLE);
                 if (mCenteredIconView.getVisibility() != View.GONE) {
                     hide(mCenteredIconView, View.INVISIBLE);
                 }
@@ -248,8 +251,10 @@ public class HeadsUpAppearanceController extends ViewController<HeadsUpStatusBar
                     hide(mOperatorNameView, View.INVISIBLE);
                 }
             } else {
-                if (!isRightClock) {
-                    show(clockView);
+                if (clockStyle == 0 && isClockVisible) {
+                    show(mClockView);
+                } else {
+                    mClockView.setVisibility(View.GONE);
                 }
                 if (mCenteredIconView.getVisibility() != View.GONE) {
                     show(mCenteredIconView);
