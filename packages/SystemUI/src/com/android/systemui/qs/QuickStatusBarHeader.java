@@ -22,7 +22,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.DisplayCutout;
@@ -57,8 +56,6 @@ import java.util.List;
  * battery, carrier info and privacy icons) and also contains the {@link QuickQSPanel}.
  */
 public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tunable {
-    private static final String NETWORK_TRAFFIC_LOCATION =
-            "customsystem:" + Settings.System.NETWORK_TRAFFIC_LOCATION;
 
     private boolean mExpanded;
     private boolean mQsDisabled;
@@ -76,6 +73,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private View mSecurityHeaderView;
     private View mStatusIconsView;
     private View mContainer;
+    private NetworkTraffic mNetworkTraffic;
 
     private View mQSCarriers;
     private ViewGroup mClockContainer;
@@ -112,11 +110,6 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
 
     private boolean mUseCombinedQSHeader;
 
-    private NetworkTraffic mNetworkTraffic;
-    private boolean mShowNetworkTraffic;
-
-    private boolean mSupportsNetworkTrafficOnStatusBar;
-
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -148,6 +141,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         mRightLayout = findViewById(R.id.rightLayout);
         mDateContainer = findViewById(R.id.date_container);
         mPrivacyContainer = findViewById(R.id.privacy_container);
+        mNetworkTraffic = findViewById(R.id.networkTraffic);
 
         mClockContainer = findViewById(R.id.clock_container);
         mClockView = findViewById(R.id.clock);
@@ -155,13 +149,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         // Tint for the battery icons are handled in setupHost()
         mBatteryRemainingIcon = findViewById(R.id.batteryRemainingIcon);
 
-        mNetworkTraffic = findViewById(R.id.network_traffic);
-
-        mSupportsNetworkTrafficOnStatusBar = mContext.getResources().getBoolean(
-            com.android.internal.R.bool.config_supportsNetworkTrafficOnStatusBar);
-
         updateResources();
-
         Configuration config = mContext.getResources().getConfiguration();
         setDatePrivacyContainersWidth(config.orientation == Configuration.ORIENTATION_LANDSCAPE);
         setSecurityHeaderContainerVisibility(
@@ -177,8 +165,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 .build();
 
         Dependency.get(TunerService.class).addTunable(this,
-                StatusBarIconController.ICON_HIDE_LIST,
-                NETWORK_TRAFFIC_LOCATION);
+                StatusBarIconController.ICON_HIDE_LIST);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -296,12 +283,12 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                     android.R.attr.textColorSecondary);
             mTextColorPrimary = textColor;
             mClockView.setTextColor(textColor);
+            mNetworkTraffic.setTintColor(textColor);
             if (mTintedIconManager != null) {
                 mTintedIconManager.setTint(textColor);
             }
             mBatteryRemainingIcon.updateColors(mTextColorPrimary, textColorSecondary,
                     mTextColorPrimary);
-            mNetworkTraffic.setTint(textColor);
         }
 
         MarginLayoutParams qqsLP = (MarginLayoutParams) mHeaderQsPanel.getLayoutParams();
@@ -360,6 +347,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 .addFloat(mDateView, "alpha", 0, 0, 1)
                 .addFloat(mClockDateView, "alpha", 1, 0, 0)
                 .addFloat(mQSCarriers, "alpha", 0, 1)
+                .addFloat(mNetworkTraffic, "alpha", 0, 1)
                 .setListener(new TouchAnimator.ListenerAdapter() {
                     @Override
                     public void onAnimationAtEnd() {
@@ -395,8 +383,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     }
 
     void setChipVisibility(boolean visibility) {
-        mNetworkTraffic.setChipVisibility(visibility);
-        if (visibility || mShowNetworkTraffic) {
+        if (visibility) {
             // Animates the icons and battery indicator from alpha 0 to 1, when the chip is visible
             mIconsAlphaAnimator = mIconsAlphaAnimatorFixed;
             mIconsAlphaAnimator.setPosition(mKeyguardExpansionFraction);
@@ -591,15 +578,5 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     public void onTuningChanged(String key, String newValue) {
         mClockView.setClockVisibleByUser(!StatusBarIconController.getIconHideList(
                 mContext, newValue).contains("clock"));
-        switch (key) {
-            case NETWORK_TRAFFIC_LOCATION:
-                int networkTrafficState = TunerService.parseInteger(newValue, 0);
-                mShowNetworkTraffic = (networkTrafficState == 2 ||
-                    (networkTrafficState == 1 && !mSupportsNetworkTrafficOnStatusBar));
-                setChipVisibility(mPrivacyChip.getVisibility() == View.VISIBLE);
-                break;
-            default:
-                break;
-        }
     }
 }

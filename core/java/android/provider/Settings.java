@@ -5679,25 +5679,48 @@ public final class Settings {
         public static final String LIVE_DISPLAY_HINTED = "live_display_hinted";
 
         /**
-         * Network traffic indicator location
-         * 0 = Disabled
-         * 1 = Statusbar
-         * 2 = Quick statusbar
+         * Whether to show network traffic indicator in statusbar
          * @hide
          */
-        public static final String NETWORK_TRAFFIC_LOCATION = "network_traffic_location";
+        @Readable
+        public static final String NETWORK_TRAFFIC_STATE = "network_traffic_state";
 
         /**
-         * Whether or not to hide the network traffic indicator when there is no activity
-         * @hide
-         */
-        public static final String NETWORK_TRAFFIC_AUTOHIDE = "network_traffic_autohide";
+    	 * What to show in network traffic indicator in statusbar
+    	 * @hide
+    	 */
+        @Readable
+        public static final String NETWORK_TRAFFIC_TYPE = "network_traffic_type";
 
         /**
-         * Measurement unit preference for network traffic
+         * Network traffic inactivity threshold (default is 1 kBs)
          * @hide
          */
-        public static final String NETWORK_TRAFFIC_UNIT_TYPE = "network_traffic_unit_type";
+        @Readable
+        public static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
+
+        /**
+         * Whether to disable showing arrows in statusbar network traffic indicators
+         * @hide
+         */
+        @Readable
+        public static final String NETWORK_TRAFFIC_ARROW = "network_traffic_arrow";
+
+        /**
+         * What size to show for network traffic indicator in statusbar
+         * @hide
+         */
+        @Readable
+        public static final String NETWORK_TRAFFIC_FONT_SIZE = "network_traffic_font_size";
+
+        /**
+         * Show network traffic indicator
+         * 0 - Statusbar (default)
+         * 1 - QS Header
+         * @hide
+         */
+        @Readable
+        public static final String NETWORK_TRAFFIC_VIEW_LOCATION = "network_traffic_view_location";
 
         /**
          * boolean value. toggles swipe up hint in gestural nav mode
@@ -5917,6 +5940,12 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SWIPE_TO_SCREENSHOT);
             PRIVATE_SETTINGS.add(DISPLAY_CUTOUT_HIDDEN);
             PRIVATE_SETTINGS.add(FORCE_FULLSCREEN_CUTOUT_APPS);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_STATE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_TYPE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_ARROW);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_FONT_SIZE);
+            PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_VIEW_LOCATION);
         }
         /**
          * These entries are considered common between the personal and the managed profile,

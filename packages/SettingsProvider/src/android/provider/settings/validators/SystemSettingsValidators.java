@@ -16,6 +16,7 @@
 
 package android.provider.settings.validators;
 
+import static android.provider.settings.validators.SettingsValidators.ANY_INTEGER_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.ANY_STRING_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.BOOLEAN_VALIDATOR;
 import static android.provider.settings.validators.SettingsValidators.COMPONENT_NAME_VALIDATOR;
@@ -291,12 +292,15 @@ public class SystemSettingsValidators {
             }
         });
         VALIDATORS.put(System.LIVE_DISPLAY_HINTED, new InclusiveIntegerRangeValidator(-3, 1));
-        VALIDATORS.put(System.NETWORK_TRAFFIC_LOCATION, NON_NEGATIVE_INTEGER_VALIDATOR);
-        VALIDATORS.put(System.NETWORK_TRAFFIC_AUTOHIDE, BOOLEAN_VALIDATOR);
-        VALIDATORS.put(System.NETWORK_TRAFFIC_UNIT_TYPE, NON_NEGATIVE_INTEGER_VALIDATOR);
         VALIDATORS.put(System.NAVIGATION_BAR_HINT, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.SWIPE_TO_SCREENSHOT, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.DISPLAY_CUTOUT_HIDDEN, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.FULLSCREEN_GESTURES, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.NETWORK_TRAFFIC_STATE, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.NETWORK_TRAFFIC_TYPE, new InclusiveIntegerRangeValidator(0, 4));
+        VALIDATORS.put(System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, ANY_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.NETWORK_TRAFFIC_ARROW, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.NETWORK_TRAFFIC_FONT_SIZE, NON_NEGATIVE_INTEGER_VALIDATOR);
+        VALIDATORS.put(System.NETWORK_TRAFFIC_VIEW_LOCATION, BOOLEAN_VALIDATOR);
     }
 }
