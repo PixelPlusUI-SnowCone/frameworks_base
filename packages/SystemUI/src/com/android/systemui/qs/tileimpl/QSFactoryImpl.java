@@ -27,6 +27,7 @@ import com.android.systemui.plugins.qs.QSTileView;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.external.CustomTile;
 import com.android.systemui.qs.tiles.AirplaneModeTile;
+import com.android.systemui.qs.tiles.AutoBrightnessTile;
 import com.android.systemui.qs.tiles.AlarmTile;
 import com.android.systemui.qs.tiles.AmbientDisplayTile;
 import com.android.systemui.qs.tiles.AntiFlickerTile;
@@ -119,7 +120,7 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<FPSInfoTile> mFPSInfoTileProvider;
     private final Provider<DataSwitchTile> mDataSwitchTileProvider;
     private final Provider<SoundTile> mSoundTileProvider;
-
+    private final Provider<AutoBrightnessTile> mAutoBrightnessTileProvider;
     private final Lazy<QSHost> mQsHostLazy;
     private final Provider<CustomTile.Builder> mCustomTileBuilderProvider;
 
@@ -167,7 +168,8 @@ public class QSFactoryImpl implements QSFactory {
             Provider<CPUInfoTile> cpuInfoTileProvider,
             Provider<FPSInfoTile> fpsInfoTileProvider,
             Provider<DataSwitchTile> dataSwitchTileProvider,
-            Provider<SoundTile> soundTileProvider) {
+            Provider<SoundTile> soundTileProvider,
+            Provider<AutoBrightnessTile> autoBrightnessTileProvider) {
         mQsHostLazy = qsHostLazy;
         mCustomTileBuilderProvider = customTileBuilderProvider;
 
@@ -212,6 +214,7 @@ public class QSFactoryImpl implements QSFactory {
         mFPSInfoTileProvider = fpsInfoTileProvider;
         mDataSwitchTileProvider = dataSwitchTileProvider;
         mSoundTileProvider = soundTileProvider;
+        mAutoBrightnessTileProvider = autoBrightnessTileProvider;
     }
 
     public QSTile createTile(String tileSpec) {
@@ -307,6 +310,8 @@ public class QSFactoryImpl implements QSFactory {
                 return mDataSwitchTileProvider.get();
             case "sound":
                 return mSoundTileProvider.get();
+            case "autobrightness":
+                return mAutoBrightnessTileProvider.get();
         }
         // Custom tiles
         if (tileSpec.startsWith(CustomTile.PREFIX)) {
