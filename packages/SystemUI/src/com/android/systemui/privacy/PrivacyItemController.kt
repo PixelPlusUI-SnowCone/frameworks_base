@@ -76,6 +76,8 @@ class PrivacyItemController @Inject constructor(
             "com.android.systemui",
             "com.google.android.settings.intelligence",
             "com.mediatek.ims",
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.gms.location.history"
         )
         val OPS_MIC_CAMERA = intArrayOf(AppOpsManager.OP_CAMERA,
                 AppOpsManager.OP_PHONE_CALL_CAMERA, AppOpsManager.OP_RECORD_AUDIO,
