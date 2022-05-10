@@ -122,13 +122,6 @@ public class PixelPropsUtils {
 
     private static final Map<String, Object> propsToChangeOP8P;
     private static final String[] packagesToChangeOP8P = {
-            "com.tencent.ig",
-            "com.pubg.imobile",
-            "com.pubg.krmobile",
-            "com.pubg.newstate",
-            "com.vng.pubgmobile",
-            "com.rekoo.pubgm",
-            "com.tencent.tmgp.pubgmhd",
             "com.riotgames.league.wildrift",
             "com.riotgames.league.wildrifttw",
             "com.riotgames.league.wildriftvn",
@@ -137,6 +130,13 @@ public class PixelPropsUtils {
 
     private static final Map<String, Object> propsToChangeMI11;
     private static final String[] packagesToChangeMI11 = {
+            "com.tencent.ig",
+            "com.pubg.imobile",
+            "com.pubg.krmobile",
+            "com.pubg.newstate",
+            "com.vng.pubgmobile",
+            "com.rekoo.pubgm",
+            "com.tencent.tmgp.pubgmhd",
             "com.mobile.legends"
     };
 
