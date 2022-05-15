@@ -130,6 +130,7 @@ import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.util.AlphaTintDrawableWrapper;
 import com.android.systemui.util.RoundedCornerProgressDrawable;
+import com.android.systemui.tuner.TunerService;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -158,6 +159,9 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     private static final int DRAWER_ANIMATION_DURATION_SHORT = 175;
     private static final int DRAWER_ANIMATION_DURATION = 250;
+
+    private static final String VOLUME_PANEL_ON_LEFT =
+            Settings.Secure.VOLUME_PANEL_ON_LEFT;
 
     private final int mDialogShowAnimationDurationMs;
     private final int mDialogHideAnimationDurationMs;
@@ -269,6 +273,8 @@ public class VolumeDialogImpl implements VolumeDialog,
     private ViewStub mODICaptionsTooltipViewStub;
     private View mODICaptionsTooltipView = null;
 
+    private TunerService mTunerService;
+
     // Volume panel placement left or right
     private boolean mVolumePanelOnLeft;
 
@@ -294,7 +300,8 @@ public class VolumeDialogImpl implements VolumeDialog,
             DeviceProvisionedController deviceProvisionedController,
             ConfigurationController configurationController,
             MediaOutputDialogFactory mediaOutputDialogFactory,
-            ActivityStarter activityStarter) {
+            ActivityStarter activityStarter,
+            TunerService tunerService) {
         mContext =
                 new ContextThemeWrapper(context, R.style.volume_dialog_theme);
         mController = volumeDialogController;
@@ -305,6 +312,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         mConfigurationController = configurationController;
         mMediaOutputDialogFactory = mediaOutputDialogFactory;
         mActivityStarter = activityStarter;
+        mTunerService = tunerService;
         mShowActiveStreamOnly = showActiveStreamOnly();
         mHasSeenODICaptionsTooltip =
                 Prefs.getBoolean(context, Prefs.Key.HAS_SEEN_ODI_CAPTIONS_TOOLTIP, false);
@@ -332,7 +340,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         }
 
         if (!mShowActiveStreamOnly) {
-            mVolumePanelOnLeft = mContext.getResources().getBoolean(R.bool.config_audioPanelOnLeftSide);;
+            mTunerService.addTunable(mTunable, VOLUME_PANEL_ON_LEFT);
         }
 
         initDimens();
@@ -727,6 +735,21 @@ public class VolumeDialogImpl implements VolumeDialog,
             }
         }
     }
+
+    private final TunerService.Tunable mTunable = new TunerService.Tunable() {
+        @Override
+        public void onTuningChanged(String key, String newValue) {
+            if (VOLUME_PANEL_ON_LEFT.equals(key)) {
+                final boolean volumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, false);
+                if (mVolumePanelOnLeft != volumePanelOnLeft) {
+                    mVolumePanelOnLeft = volumePanelOnLeft;
+                    mHandler.post(() -> {
+                        mControllerCallbackH.onConfigurationChanged();
+                    });
+                }
+            }
+        }
+    };
 
     protected ViewGroup getDialogView() {
         return mDialogView;

@@ -10974,6 +10974,11 @@ public final class Settings {
         @Readable
         public static final String GAME_DASHBOARD_ALWAYS_ON = "game_dashboard_always_on";
 
+        /**
+         * Volume panel on left
+         * @hide
+         */
+        public static final String VOLUME_PANEL_ON_LEFT = "volume_panel_on_left";
 
         /**
          * For this device state, no specific auto-rotation lock setting should be applied.
