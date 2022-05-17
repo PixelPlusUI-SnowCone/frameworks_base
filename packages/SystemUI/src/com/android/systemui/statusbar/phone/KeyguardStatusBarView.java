@@ -62,6 +62,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
 
     private final Rect mEmptyRect = new Rect(0, 0, 0, 0);
 
+    private boolean mShowPercentAvailable;
     private boolean mBatteryCharging;
 
     private TextView mCarrierLabel;
@@ -177,6 +178,8 @@ public class KeyguardStatusBarView extends RelativeLayout {
                 R.dimen.ongoing_appops_dot_min_padding);
         mCutoutSideNudge = getResources().getDimensionPixelSize(
                 R.dimen.display_cutout_margin_consumption);
+        mShowPercentAvailable = getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_battery_percentage_setting_available);
         mRoundedCornerPadding = res.getDimensionPixelSize(
                 R.dimen.rounded_corner_content_padding);
     }
@@ -206,7 +209,7 @@ public class KeyguardStatusBarView extends RelativeLayout {
                 mMultiUserAvatar.setVisibility(View.GONE);
             }
         }
-        mBatteryView.setForceShowPercent(mBatteryCharging);
+        mBatteryView.setForceShowPercent(mBatteryCharging && mShowPercentAvailable);
     }
 
     private void updateSystemIconsLayoutParams() {
