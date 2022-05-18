@@ -85,6 +85,7 @@ android_library {
         "res-keyguard",
         "res",
         "res-pixel",
+        "res-blur",
     ],
     static_libs: [
         "WindowManager-Shell",
@@ -128,6 +129,7 @@ android_library {
         "vendor-pixelatoms-java",
         "colorkt",
         "themelib",
+        "AndroidSystemBlur",
     ],
     manifest: "AndroidManifest.xml",
     additional_manifests: ["SystemUIGoogle-Manifest.xml"],
